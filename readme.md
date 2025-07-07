@@ -1,9 +1,9 @@
 # auto-remote-deployment-tool
 ![QQ](https://img.shields.io/badge/QQ-306863030-green.svg) [![Gitee](https://img.shields.io/badge/Gitee-roman_123-blue.svg)](https://gitee.com/roman_123/auto-remote-deployment-tool) [![GitHub](https://img.shields.io/badge/GitHub-roman_123-blue.svg)](https://github.com/qq306863030/auto-remote-deployment-tool) [![NPM](https://img.shields.io/badge/NPM-roman_123-blue.svg)](https://www.npmjs.com/package/auto-remote-deployment-tool) ![HOME](https://img.shields.io/badge/HOME-auto_remote_deployment_tool-blue)
 
-> A simple Node.js-based remote deployment tool that makes deployments easier with config files. 
+> A simple Node.js-based remote deployment tool that makes deployments easier with config files. 一个基于nodejs的简单的远程部署工具，可以通过配置文件让部署工作变得更容易。
 
-[English](readme.md) | [简体中文](readme.zh-CN.md)
+[English](https://github.com/qq306863030/auto-remote-deployment-tool/blob/master/readme.md) | [简体中文](https://github.com/qq306863030/auto-remote-deployment-tool/blob/master/readme.zh-CN.md)
 
 ## Installation
 ```bash
