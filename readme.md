@@ -3,7 +3,7 @@
 
 > A simple Node.js-based remote deployment tool that makes deployments easier with config files. 
 
-[English](README.md) | [简体中文](README.zh-CN.md)
+[English](readme.md) | [简体中文](readme.zh-CN.md)
 
 ## Installation
 ```bash
