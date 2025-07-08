@@ -1,92 +1,108 @@
-# auto-remote-deployment-tool
-![QQ](https://img.shields.io/badge/QQ-306863030-green.svg) [![Gitee](https://img.shields.io/badge/Gitee-roman_123-blue.svg)](https://gitee.com/roman_123/auto-remote-deployment-tool) [![GitHub](https://img.shields.io/badge/GitHub-roman_123-blue.svg)](https://github.com/qq306863030/auto-remote-deployment-tool) [![NPM](https://img.shields.io/badge/NPM-roman_123-blue.svg)](https://www.npmjs.com/package/auto-remote-deployment-tool) ![HOME](https://img.shields.io/badge/HOME-auto_remote_deployment_tool-blue)
 
-> A simple Node.js-based remote deployment tool that makes deployments easier with config files. 一个基于nodejs的简单的远程部署工具，可以通过配置文件让部署工作变得更容易。
+ # auto-remote-deployment-tool
+ ![QQ](https://img.shields.io/badge/QQ-306863030-green.svg) [![Gitee](https://img.shields.io/badge/Gitee-roman_123-blue.svg)](https://gitee.com/roman_123/auto-remote-deployment-tool) [![GitHub](https://img.shields.io/badge/GitHub-roman_123-blue.svg)](https://github.com/qq306863030/auto-remote-deployment-tool) [![NPM](https://img.shields.io/badge/NPM-roman_123-blue.svg)](https://www.npmjs.com/package/auto-remote-deployment-tool) ![HOME](https://img.shields.io/badge/HOME-auto_remote_deployment_tool-blue)
 
-[English](https://github.com/qq306863030/auto-remote-deployment-tool/blob/master/readme.md) | [简体中文](https://github.com/qq306863030/auto-remote-deployment-tool/blob/master/readme.zh-CN.md)
+> A simple Node.js-based remote deployment tool that makes deployments easier with config files.
+> 一个基于nodejs的简单的远程部署工具，可以通过配置文件让部署工作变得更容易。
 
-## Installation
+[简体中文](https://github.com/qq306863030/auto-remote-deployment-tool/blob/master/readme.md) | [English](https://github.com/qq306863030/auto-remote-deployment-tool/blob/master/readme.en.md)
+
+## 安装
 ```bash
 npm install -g auto-remote-deployment-tool
 ```
-## Usage
+
+## 使用
 ```bash
-remoted init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
-remoted exec [configFilePath] # Execute the commands in the specified configuration file (example: remoted exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: remoted exec ./src/). By default, it looks for the server.config.json file in the current directory.
-```
-## Introduction
-```bash
-# Configuration file
-    "description": "A configuration file example", // Description of the configuration file, displayed when the program starts
-    "host": "127.0.0.1", // IP address of the remote server
-    "port": 22, // SSH port of the remote server
-    "username": "root", // Username for the remote server
-    "password": "password", // Password for the remote server
-    "privateKeyPath"?: "C:/id_rsa", // Path to the private key file of the remote server (choose one of password or private key)
-    "localBaseDir": "./", // Root directory for executing commands locally
-    "remoteBaseDir": "/home", // Root directory for executing commands on the remote server
-    "isPrintResult": true, // Whether to print the execution result
-    "isPrintCurCommand": false, // Whether to print the current executing command
-    "isPrintTotalExecTime": true, // Whether to print the total execution time
-    "commands": [] // Command array
-# commands：
-## Prefix (if no prefix is entered, [remote:] is used by default):
-[local:] # Execute local commands
-[local-cd:] # Switch the local base directory path (dynamically switch the localBaseDir in the configuration file, example: [local-cd:]targetPath)
-[local-pwd:] # Get the current local base directory path (example: [local-pwd:])
-[remote:] # Execute remote commands
-[remote-cp:] # Execute remote copy command (example: [remote-cp:]originPath,targetPath)
-[remote-mv:] # Execute remote move command (example: [remote-mv:]originPath,targetPath)
-[remote-rm:] # Execute remote delete command ([remote-rm:][targetPath,targetPath,targetPath,targetPath...|targetPath/*], example 1: [remote-rm:]./test1.txt,./test2.txt  example 2: [remote-rm:]./test/*)
-[remote-mkdir:] # Execute remote create directory command (example: [remote-mkdir:]targetPath)
-[remote-hasPath:] # Check if a remote file or directory exists, return true or false (example: [remote-hasPath:]targetPath)
-[remote-hasPort:] # Check if a remote port is occupied, return true or false (example: [remote-hasPort:]8080)
-[remote-cd:] # Switch the remote base directory path (dynamically switch the remoteBaseDir in the configuration file, example: [remote-cd:]targetPath)
-[remote-pwd:] # Get the current remote base directory path (example: [remote-pwd:])
-[upload:] # Upload files or directories ([upload:]localPath,remotePath,includeKeyWords,excludeKeyWords  example 1:[upload:]./dist,/{remoteBaseDir}/dist  example 2: [upload:]./dist,/{remoteBaseDir}/dist,[.js,.css,.html],[.tmp,.bak]  example 3: [upload:]./dist,/{remoteBaseDir}/dist,,[.tmp,.bak])
-[print:] # Print information in the current console
-[sleep:] # Pause execution for the specified number of milliseconds (example: [sleep:]3000)
-[record-exec-time:] Custom identifier # Record the execution time of the command (example: [record-exec-time:]record1)
-[print-exec-time:] # Print the execution time of the command, needs to be used in pairs with [record-exec-time:]
-[print-time:] # Print the current time
-## Parameters that can be added to the command prefix (example: [remote(isNotPrint, isSkipErr):])
-isNotPrint # Do not print information in the current console
-isSkipErr # When the current command execution errors, skip and execute the next command instead of exiting the process
-isBoolInversion # Invert the boolean value, that is, true becomes false and false becomes true
-## Strings that will be automatically replaced in the command: 
-{localBaseDir} 
-{remoteBaseDir} 
-{time-[format]}(Replace with the current time, example: {time-[YYYY-MM-DD HH:mm:ss]}) 
-{startTime-[format]}(Replace with the start time of executing the script, example: {startTime-[YYYY-MM-DD HH:mm:ss]})
-## commands can be nested in sub-arrays, which will be executed when the previous command returns true
+remoted init [configFileName] # 在当前目录生成server.config.js/json配置文件, 如果host未配置, 则不连接远程服务器
+remoted exec [configFilePath] # 执行指定配置文件中的命令(示例: remoted exec ./remote.config.json)或指定一个目录，自动在指定目录中查找server.config.json文件(示例: remoted exec ./src/),默认查找当前目录下的server.config.json文件
 ```
 
-## Configuration File Example
+## 介绍
+```bash
+# 配置文件
+{
+    "description": "一个配置文件示例", // 配置文件描述，程序启动时显示
+    "host": "127.0.0.1", // 远程服务器IP地址
+    "port": 22, // 远程服务器SSH端口
+    "username": "root", // 远程服务器用户名
+    "password": "password", // 远程服务器密码
+    "privateKeyPath"?: "C:/id_rsa", // 远程服务器私钥文件路径（与密码选其一）
+    "localBaseDir": "./", // 本地执行命令的根目录
+    "remoteBaseDir": "/home", // 远端执行命令的根目录
+    "isPrintResult": true, // 是否打印执行结果
+    "isPrintCurCommand": false, // 是否打印当前执行的命令
+    "isPrintTotalExecTime": true, // 是否打印总的执行时间
+    "commands": [] // 命令数组
+}
+
+
+# commands：
+## 前缀(如果没有输入前缀，默认使用[remote:])：
+[local:] # 执行本地命令
+[local-cd:] # 切换本地基础目录路径(动态切换配置文件中的localBaseDir, 示例: [local-cd:]targetPath)
+[local-pwd:] # 获取当前本地基础目录路径(示例: [local-pwd:])
+[remote:] # 执行远端命令
+[remote-cp:] # 执行远程拷贝命令(示例: [remote-cp:]originPath,targetPath)
+[remote-mv:] # 执行远程剪切命令(示例: [remote-mv:]originPath,targetPath)
+[remote-rm:] # 执行远程删除命令([remote-rm:][targetPath,targetPath,targetPath,targetPath...|targetPath/*], 示例1: [remote-rm:]./test1.txt,./test2.txt 示例2: [remote-rm:]./test/*)
+[remote-mkdir:] # 执行远程创建目录命令(示例: [remote-mkdir:]targetPath)
+[remote-hasPath:] # 判断远程文件或目录是否存在，返回true或false(示例: [remote-hasPath:]targetPath)
+[remote-hasPort:] # 判断远程端口是否被占用，返回true或false(示例: [remote-hasPort:]8080)
+[remote-cd:] # 切换远程基础目录路径(动态切换配置文件中的remoteBaseDir, 示例: [remote-cd:]targetPath)
+[remote-pwd:] # 获取当前远程基础目录路径(示例: [remote-pwd:])
+[upload:] # 上传文件或目录 ([upload:]localPath,remotePath,includeKeyWords,excludeKeyWords 示例1:[upload:]./dist,/{remoteBaseDir}/dist  示例2: [upload:]./dist,/{remoteBaseDir}/dist,[.js,.css,.html],[.tmp,.bak] 示例3: [upload:]./dist,/{remoteBaseDir}/dist,,[.tmp,.bak])
+[print:] # 在当前控制台打印信息
+[sleep:] # 暂停执行指定毫秒数(示例: [sleep:]3000)
+[record-exec-time:]自定义标识符 # 记录执行命令消耗时间(示例：[record-exec-time:]record1)
+[print-exec-time:] # 打印执行命令消耗时间, 需与[record-exec-time:]成对使用
+[print-time:] # 打印当前时间
+
+
+## 可在命令前缀中增加的参数(示例：[remote(isNotPrint, isSkipErr):])
+isNotPrint # 不在当前控制台打印信息
+isSkipErr # 当前命令执行报错时跳过并执行下一条命令，而不是退出进程
+isBoolInversion # 布尔值取反，即true变false，false变true
+
+## 命令中会自动替换的字符串： 
+{localBaseDir} 
+{remoteBaseDir} 
+{time-[format]}(替换为当前时间，示例: {time-[YYYY-MM-DD HH:mm:ss]}) 
+{startTime-[format]}(替换为开始执行脚本的时间，示例: {startTime-[YYYY-MM-DD HH:mm:ss]})
+
+## commands可以嵌套子数组，当上一条命令返回true时执行
+```
+
+## 配置文件示例
 ```js
 module.exports = {
-    "description": "A configuration file example",
+    "description": "一个配置文件示例",
     "host": "127.0.0.1",
     "port": 22,
     "username": "root",
     "password": "password",
-    "localBaseDir": "./", // Root directory for executing commands locally
-    "remoteBaseDir": "/home", // Root directory for executing commands on the remote server
-    "isPrintResult": true, // Whether to print the execution result
-    "isPrintCurCommand": false, // Whether to print the current executing command
-    "isPrintTotalExecTime": true, // Whether to print the total execution time
+    "localBaseDir": "./", // 本地执行命令的根目录
+    "remoteBaseDir": "/home", // 远端执行命令的根目录
+    "isPrintResult": true, // 是否打印执行结果
+    "isPrintCurCommand": false, // 是否打印当前执行的命令
+    "isPrintTotalExecTime": true, // 是否打印总的执行时间
     "commands": [
-        "[local:]npm run build", // Execute local command to package files
-        "[remote:]cd /usr;ls -al", // View the details of the current directory
-        "[upload:]./dist,{remoteBaseDir}/dist", // Upload the project directory
-        "[upload:]./test.txt,{remoteBaseDir}/test.txt", // Upload the file
-        "[upload:]./test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // Upload the file and add a timestamp
-        "[remote-mkdir:]{remoteBaseDir}/test-dir", // Create a directory
-        "[remote-cp:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test-dir/test.txt", // Remotely copy the file
-        "[remote-mv:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD]}.txt", // Rename the file
-        "[remote-rm:]{remoteBaseDir}/test.txt", // Delete the file
-        "[remote-rm:]{remoteBaseDir}/dist", // Delete the directory
-        "[print:]Script execution completed"
+        "[local:]npm run build", // 本地执行命令, 打包文件
+        "[remote:]cd /usr;ls -al", // 查看当前目录详情
+        "[upload:]./dist,{remoteBaseDir}/dist", // 上传项目目录
+        "[upload:]./test.txt,{remoteBaseDir}/test.txt", // 上传文件并增加时间戳
+        "[upload:]./test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // 上传文件并增加时间戳
+        "[remote-mkdir:]{remoteBaseDir}/test-dir", // 创建一个目录
+        "[remote-cp:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test-dir/test.txt", // 远程拷贝文件
+        "[remote-mv:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD]}.txt", // 重命名文件
+        "[remote-rm:]{remoteBaseDir}/test.txt", // 删除文件
+        "[remote-rm:]{remoteBaseDir}/dist", // 删除目录
+        "[print:]脚本执行完成"
     ]
+}
+
+
+
 module.exports = {
     "host": "116.196.68.99",
     "port": 22,
@@ -94,31 +110,32 @@ module.exports = {
     "password": "ZYzx1357%",
     "localBaseDir": "./",
     "remoteBaseDir": "/home",
-	"isPrintResult": true, // Whether to print the execution result
-	"isPrintCurCommand": true, // Whether to print the current executing command
-    "isPrintTotalExecTime": true, // Whether to print the total execution time
+    "isPrintResult": true, // 是否打印执行结果
+    "isPrintCurCommand": true, // 是否打印当前执行的命令
+    "isPrintTotalExecTime": true, // 是否打印总的执行时间
     "commands": [
-		"[local:]echo 'hello world'", // Print 'hello world' and output the return content 'hello world'
-		"[local(isNotPrint):]echo 'hello world'", // Only print 'hello world' without outputting the return content
-		"[remote-hasPath:]/usr", // Check if the usr directory exists, return true
-		"[remote-hasPath:]/my-remote-test", // Check if the my-remote-test directory exists, return false
-		"[remote(isSkipErr):]cd /my-dir/my-remote-test", // Create the directory /dir/my-remote-test. Since the path does not exist, the creation fails, and isSkipErr skips the error
-		"[remote(isSkipErr, isNotPrint):]cd /my-dir/my-remote-test", // Create the directory /dir/my-remote-test. Since the path does not exist, the creation fails, isSkipErr skips the error, and isNotPrint does not print the error message
-		"[remote-mkdir:]/my-remote-test", // Create the directory /my-remote-test
-		"[remote-hasPath:]/my-remote-test", // Check if the my-remote-test directory exists, return true, and execute the following array content
+		"[local:]echo 'hello world'", // 打印hello world，并输出返回内容hello world
+		"[local(isNotPrint):]echo 'hello world'", // 仅打印hello world，不输出返回内容
+		"[remote-hasPath:]/usr", // 判断usr目录是否存在，返回true
+		"[remote-hasPath:]/my-remote-test", // 判断my-remote-test目录是否存在，返回false
+		"[remote(isSkipErr):]cd /my-dir/my-remote-test", // 创建目录/dir/my-remote-test，由于路径不存在创建失败，isSkipErr跳过错误
+		"[remote(isSkipErr, isNotPrint):]cd /my-dir/my-remote-test", // 创建目录/dir/my-remote-test，由于路径不存在创建失败，isSkipErr跳过错误, isNotPrint不打印报错信息
+		"[remote-mkdir:]/my-remote-test", // 创建目录/my-remote-test
+		"[remote-hasPath:]/my-remote-test", // 判断my-remote-test目录是否存在，返回true，执行以下数组的内容
 		[
-			"[remote:]cd /my-remote-test;mkdir /my-remote-test/test1", // Create the directory test1 in the my-remote-test directory
-			"[remote-mv:]/my-remote-test/test1,/my-remote-test/test{time-[YYYY-MM-DD]}" // Rename test1
+			"[remote:]cd /my-remote-test;mkdir /my-remote-test/test1", // 在目录my-remote-test中创建目录test1
+			"[remote-mv:]/my-remote-test/test1,/my-remote-test/test{time-[YYYY-MM-DD]}" // 重命名test1
 		],
-		"[remote-hasPort:]8003", // Check if the port is occupied. If it returns false, the following array content will not be executed
+		"[remote-hasPort:]8003", // 判断端口是否被占用, 如果返回false,则不执行以下数组的内容
 		[
-			"[remote-mkdir:]/my-remote-test/test2", // Create the directory test2
-			"[print:]'Array execution'"
+			"[remote-mkdir:]/my-remote-test/test2", // 创建目录test2
+			"[print:]'数组执行'"
 		],
-		"[remote-hasPort(isBoolInversion, isNotPrint):]8003", // Check if the port is occupied. If it is occupied, return true. By setting isBoolInversion to invert, the final return is false, and the array is not executed
+		"[remote-hasPort(isBoolInversion, isNotPrint):]8003", // 判断端口是否被占用, 如果被占用，则返回true，通过设置isBoolInversion取反，最后返回false，数组不执行
 		[
-			"[print:]'Array 2 execution'"
+			"[print:]'数组2执行'"
 		],
-		"[print:]Script execution completed"
+		"[print:]脚本执行完成"
     ]
+}
 ```
