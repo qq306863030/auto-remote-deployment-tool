@@ -14,8 +14,8 @@ npm install -g rdtool
 
 ## 使用
 ```bash
-rd init [configFileName] # 在当前目录生成server.config.js/json配置文件, 如果host未配置, 则不连接远程服务器
-rd exec [configFilePath] # 执行指定配置文件中的命令(示例: rd exec ./remote.config.json)或指定一个目录，自动在指定目录中查找server.config.json文件(示例: rd exec ./src/),默认查找当前目录下的server.config.json文件
+rdt init [configFileName] # 在当前目录生成server.config.js/json配置文件, 如果host未配置, 则不连接远程服务器
+rdt exec [configFilePath] # 执行指定配置文件中的命令(示例: rdt exec ./remote.config.json)或指定一个目录，自动在指定目录中查找server.config.json文件(示例: rdt exec ./src/),默认查找当前目录下的server.config.json文件
 ```
 
 ## 介绍

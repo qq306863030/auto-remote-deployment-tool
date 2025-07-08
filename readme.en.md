@@ -12,8 +12,8 @@ npm install -g rdtool
 ```
 ## Usage
 ```bash
-rd init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
-rd exec [configFilePath] # Execute the commands in the specified configuration file (example: rd exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: rd exec ./src/). By default, it looks for the server.config.json file in the current directory.
+rdt init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
+rdt exec [configFilePath] # Execute the commands in the specified configuration file (example: rdt exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: rdt exec ./src/). By default, it looks for the server.config.json file in the current directory.
 ```
 ## Introduction
 ```bash
