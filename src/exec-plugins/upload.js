@@ -1,7 +1,7 @@
 const path = require("path");
 const { uploadFile, replacePath } = require("../tools");
 
-async function exec(client, config, command) {
+async function exec(client, config, command, args=[]) {
   const arr = parse(command);
   const includeKeyWords = parse2(arr[2]);
   const excludeKeyWords = parse2(arr[3]);
@@ -13,7 +13,8 @@ async function exec(client, config, command) {
     arr[0],
     arr[1],
     includeKeyWords,
-    excludeKeyWords
+    excludeKeyWords,
+    args.includes("isPrintUploadPath")
   );
   if (res || res === undefined) {
     return `文件上传完成, 本地路径: ${path.resolve(
@@ -39,7 +40,6 @@ function parse(command) {
     const includes = "[" + arr2[1].trim();
     return [path1, path2, excludes, includes];
   }
-
   return [path1, path2, "[]", "[]"];
 }
 

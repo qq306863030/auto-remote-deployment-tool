@@ -51,7 +51,7 @@ rd exec [configFilePath] # 执行指定配置文件中的命令(示例: rd exec 
 [remote-hasPort:] # 判断远程端口是否被占用，返回true或false(示例: [remote-hasPort:]8080)
 [remote-cd:] # 切换远程基础目录路径(动态切换配置文件中的remoteBaseDir, 示例: [remote-cd:]targetPath)
 [remote-pwd:] # 获取当前远程基础目录路径(示例: [remote-pwd:])
-[upload:] # 上传文件或目录 ([upload:]localPath,remotePath,includeKeyWords,excludeKeyWords 示例1:[upload:]./dist,/{remoteBaseDir}/dist  示例2: [upload:]./dist,/{remoteBaseDir}/dist,[.js,.css,.html],[.tmp,.bak] 示例3: [upload:]./dist,/{remoteBaseDir}/dist,,[.tmp,.bak])
+[upload:] # 上传文件或目录 ([upload:]localPath,remotePath,includeKeyWords,excludeKeyWords 示例1:[upload:]./dist,/{remoteBaseDir}/dist  示例2: [upload:]./dist,/{remoteBaseDir}/dist,[.js,.css,.html],[.tmp,.bak] 示例3: [upload(isPrintUploadPath):]./dist,/{remoteBaseDir}/dist,[],[.tmp,.bak])
 [print:] # 在当前控制台打印信息
 [sleep:] # 暂停执行指定毫秒数(示例: [sleep:]3000)
 [record-exec-time:]自定义标识符 # 记录执行命令消耗时间(示例：[record-exec-time:]record1)
@@ -63,6 +63,7 @@ rd exec [configFilePath] # 执行指定配置文件中的命令(示例: rd exec 
 isNotPrint # 不在当前控制台打印信息
 isSkipErr # 当前命令执行报错时跳过并执行下一条命令，而不是退出进程
 isBoolInversion # 布尔值取反，即true变false，false变true
+isPrintUploadPath # 显示正在上传的文件路径, 仅用于文件上传命令(示例：[upload(isPrintUploadPath):]./dist,./dist,[],[])
 
 ## 命令中会自动替换的字符串： 
 {localBaseDir} 
@@ -89,13 +90,13 @@ module.exports = {
     "commands": [
         "[local:]npm run build", // 本地执行命令, 打包文件
         "[remote:]cd /usr;ls -al", // 查看当前目录详情
-        "[upload:]./dist,{remoteBaseDir}/dist", // 上传项目目录
-        "[upload:]./test.txt,{remoteBaseDir}/test.txt", // 上传文件并增加时间戳
-        "[upload:]./test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // 上传文件并增加时间戳
-        "[remote-mkdir:]{remoteBaseDir}/test-dir", // 创建一个目录
-        "[remote-cp:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test-dir/test.txt", // 远程拷贝文件
-        "[remote-mv:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD]}.txt", // 重命名文件
-        "[remote-rm:]{remoteBaseDir}/test.txt", // 删除文件
+        "[upload:]./dist,./dist", // 上传项目目录
+        "[upload:]./test.txt,./test.txt", // 上传文件并增加时间戳
+        "[upload:]./test.txt,./test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // 上传文件并增加时间戳
+        "[remote-mkdir:]./test-dir", // 创建一个目录
+        "[remote-cp:]./test.txt,./test-dir/test.txt", // 远程拷贝文件
+        "[remote-mv:]./test.txt,./test{startTime-[YYYY-MM-DD]}.txt", // 重命名文件
+        "[remote-rm:]./test.txt", // 删除文件
         "[remote-rm:]{remoteBaseDir}/dist", // 删除目录
         "[print:]脚本执行完成"
     ]

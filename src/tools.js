@@ -91,7 +91,9 @@ function disconnectServer(client) {
 }
 
 // 文件上传
-function uploadFile(config, client, filePath, remotePath, includeKeyWords, excludeKeyWords) {
+function uploadFile(config, client, filePath, remotePath, includeKeyWords=[], excludeKeyWords=[], isPrintUploadPath=false) {
+  includeKeyWords = includeKeyWords.map(item => item.trim());
+  excludeKeyWords = excludeKeyWords.map(item => item.trim());
   filePath = path.resolve(config.localBaseDir, filePath);
   // 判断是否存在
   if (!fs.pathExistsSync(filePath)) {
@@ -105,8 +107,14 @@ function uploadFile(config, client, filePath, remotePath, includeKeyWords, exclu
     return client.putDirectory(filePath, remotePath, {
       sftp,
       recursive: true,
-      concurrency: 10,
+      concurrency: 1,
+      tick: (localPath, remotePath) => {
+        if (isPrintUploadPath) {
+          logBlue(`上传${localPath} => ${remotePath}`);
+        }
+      },
       validate: path => {
+        let valid = true;
         if (includeKeyWords && excludeKeyWords && includeKeyWords.length > 0 && excludeKeyWords.length > 0) {
           const isInclude = includeKeyWords.some(str => {
             return path.includes(str)
@@ -114,22 +122,25 @@ function uploadFile(config, client, filePath, remotePath, includeKeyWords, exclu
           const isExclude = excludeKeyWords.some(str => {
             return path.includes(str)
           })
-          return isInclude && !isExclude
+          valid = isInclude && !isExclude
         }
-        if (includeKeyWords & includeKeyWords.length > 0) {
-          return includeKeyWords.some(str => {
+        if (includeKeyWords && includeKeyWords.length > 0) {
+          valid = includeKeyWords.some(str => {
             return path.includes(str)
           })
         }
-        if (excludeKeyWords & excludeKeyWords.length > 0) {
-          return !excludeKeyWords.some(str => {
+        if (excludeKeyWords && excludeKeyWords.length > 0) {
+          valid = !excludeKeyWords.some(str => {
             return path.includes(str)
           })
         }
-        return true;
+        return valid;
       }
     });
   } else {
+    if (isPrintUploadPath) {
+      logBlue(`上传${filePath} => ${remotePath}`);
+    }
     // 上传文件
     return client.putFile(filePath, remotePath, sftp);
   }

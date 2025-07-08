@@ -54,6 +54,7 @@ rd exec [configFilePath] # Execute the commands in the specified configuration f
 isNotPrint # Do not print information in the current console
 isSkipErr # When the current command execution errors, skip and execute the next command instead of exiting the process
 isBoolInversion # Invert the boolean value, that is, true becomes false and false becomes true
+isPrintUploadPath # Display the file path of the file being uploaded, only used for the file upload command.(示例：[upload(isPrintUploadPath):]./dist,./dist,[],[])
 ## Strings that will be automatically replaced in the command: 
 {localBaseDir} 
 {remoteBaseDir} 
@@ -78,13 +79,13 @@ module.exports = {
     "commands": [
         "[local:]npm run build", // Execute local command to package files
         "[remote:]cd /usr;ls -al", // View the details of the current directory
-        "[upload:]./dist,{remoteBaseDir}/dist", // Upload the project directory
-        "[upload:]./test.txt,{remoteBaseDir}/test.txt", // Upload the file
-        "[upload:]./test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // Upload the file and add a timestamp
-        "[remote-mkdir:]{remoteBaseDir}/test-dir", // Create a directory
-        "[remote-cp:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test-dir/test.txt", // Remotely copy the file
-        "[remote-mv:]{remoteBaseDir}/test.txt,{remoteBaseDir}/test{startTime-[YYYY-MM-DD]}.txt", // Rename the file
-        "[remote-rm:]{remoteBaseDir}/test.txt", // Delete the file
+        "[upload:]./dist,./dist", // Upload the project directory
+        "[upload:]./test.txt,./test.txt", // Upload the file
+        "[upload:]./test.txt,./test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // Upload the file and add a timestamp
+        "[remote-mkdir:]./test-dir", // Create a directory
+        "[remote-cp:]./test.txt,./test-dir/test.txt", // Remotely copy the file
+        "[remote-mv:]./test.txt,./test{startTime-[YYYY-MM-DD]}.txt", // Rename the file
+        "[remote-rm:]./test.txt", // Delete the file
         "[remote-rm:]{remoteBaseDir}/dist", // Delete the directory
         "[print:]Script execution completed"
     ]
