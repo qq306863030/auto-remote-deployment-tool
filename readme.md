@@ -1,5 +1,5 @@
 
- # auto-remote-deployment-tool
+ # rdtool
  ![QQ](https://img.shields.io/badge/QQ-306863030-green.svg) [![Gitee](https://img.shields.io/badge/Gitee-roman_123-blue.svg)](https://gitee.com/roman_123/auto-remote-deployment-tool) [![GitHub](https://img.shields.io/badge/GitHub-roman_123-blue.svg)](https://github.com/qq306863030/auto-remote-deployment-tool) [![NPM](https://img.shields.io/badge/NPM-roman_123-blue.svg)](https://www.npmjs.com/package/auto-remote-deployment-tool) ![HOME](https://img.shields.io/badge/HOME-auto_remote_deployment_tool-blue)
 
 > A simple Node.js-based remote deployment tool that makes deployments easier with config files.
@@ -9,13 +9,13 @@
 
 ## 安装
 ```bash
-npm install -g auto-remote-deployment-tool
+npm install -g rdtool
 ```
 
 ## 使用
 ```bash
-remoted init [configFileName] # 在当前目录生成server.config.js/json配置文件, 如果host未配置, 则不连接远程服务器
-remoted exec [configFilePath] # 执行指定配置文件中的命令(示例: remoted exec ./remote.config.json)或指定一个目录，自动在指定目录中查找server.config.json文件(示例: remoted exec ./src/),默认查找当前目录下的server.config.json文件
+rd init [configFileName] # 在当前目录生成server.config.js/json配置文件, 如果host未配置, 则不连接远程服务器
+rd exec [configFilePath] # 执行指定配置文件中的命令(示例: rd exec ./remote.config.json)或指定一个目录，自动在指定目录中查找server.config.json文件(示例: rd exec ./src/),默认查找当前目录下的server.config.json文件
 ```
 
 ## 介绍

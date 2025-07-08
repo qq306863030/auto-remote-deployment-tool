@@ -15,5 +15,5 @@ module.exports = {
     "[upload:]{localBaseDir}/test.txt,{remoteBaseDir}/test{time-[YYYY-MM-DD HH:mm:ss]}.txt",
     "[print:]脚本执行完成",
   ],
-  footer: "you need to install auto-remote-deployment-tool first: npm install auto-remote-deployment-tool -g"
+  footer: "you need to install rdtool first: npm install rdtool -g"
 };

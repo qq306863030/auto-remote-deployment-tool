@@ -5,7 +5,8 @@ const { getVersion } = require("../src/tools");
 
 program
   .version(getVersion())
-  .name('remoted')
+  .name('rdt')
+  .description('A simple remote deployment tool')
   .usage("[option|command]")
 
 program

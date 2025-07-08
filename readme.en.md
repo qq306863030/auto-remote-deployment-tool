@@ -1,4 +1,4 @@
-# auto-remote-deployment-tool
+# rdtool
 ![QQ](https://img.shields.io/badge/QQ-306863030-green.svg) [![Gitee](https://img.shields.io/badge/Gitee-roman_123-blue.svg)](https://gitee.com/roman_123/auto-remote-deployment-tool) [![GitHub](https://img.shields.io/badge/GitHub-roman_123-blue.svg)](https://github.com/qq306863030/auto-remote-deployment-tool) [![NPM](https://img.shields.io/badge/NPM-roman_123-blue.svg)](https://www.npmjs.com/package/auto-remote-deployment-tool) ![HOME](https://img.shields.io/badge/HOME-auto_remote_deployment_tool-blue)
 
 > A simple Node.js-based remote deployment tool that makes deployments easier with config files. 
@@ -8,12 +8,12 @@
 
 ## Installation
 ```bash
-npm install -g auto-remote-deployment-tool
+npm install -g rdtool
 ```
 ## Usage
 ```bash
-remoted init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
-remoted exec [configFilePath] # Execute the commands in the specified configuration file (example: remoted exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: remoted exec ./src/). By default, it looks for the server.config.json file in the current directory.
+rd init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
+rd exec [configFilePath] # Execute the commands in the specified configuration file (example: rd exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: rd exec ./src/). By default, it looks for the server.config.json file in the current directory.
 ```
 ## Introduction
 ```bash
