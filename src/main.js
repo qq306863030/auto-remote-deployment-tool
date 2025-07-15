@@ -12,7 +12,9 @@ const {
   logBlue,
   logRed,
   logGreen,
-  isNotEmpty
+  isNotEmpty,
+  formatMS,
+  globalSetter,
 } = require("./tools");
 
 function init(filename) {
@@ -45,6 +47,7 @@ async function exec(filePath) {
   startTime = Date.now();
   // 读取配置文件
   const config = readConfig(filePath);
+  globalSetter.config = config;
   config.startTime = Date.now();
   config.startTimeTip = ""
   if (config.description) {
@@ -72,7 +75,7 @@ async function exec(filePath) {
     disconnectServer(client)
   }
   if (config.isPrintTotalExecTime) {
-    logGreen(`程序执行完毕, 共耗时${Date.now() - startTime}ms`)
+    logGreen(`程序执行完毕, 共耗时${formatMS(Date.now() - startTime)}`)
   }
 }
 

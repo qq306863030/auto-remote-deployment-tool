@@ -19,6 +19,7 @@ rdt exec [configFilePath] # Execute the commands in the specified configuration 
 ```bash
 # Configuration file
     "description": "A configuration file example", // Description of the configuration file, displayed when the program starts
+    "scriptCode": "", // The script execution command (relative path pointing to the directory where the rdt command is executed)
     "host": "127.0.0.1", // IP address of the remote server
     "port": 22, // SSH port of the remote server
     "username": "root", // Username for the remote server
@@ -27,7 +28,8 @@ rdt exec [configFilePath] # Execute the commands in the specified configuration 
     "localBaseDir": "./", // Root directory for executing commands locally
     "remoteBaseDir": "/home", // Root directory for executing commands on the remote server
     "isPrintResult": true, // Whether to print the execution result
-    "isPrintCurCommand": false, // Whether to print the current executing command
+    "isPrintCurCommand": true, // Whether to print the current executing command
+    "isPrintCurTime": true, // Whether to print the current time
     "isPrintTotalExecTime": true, // Whether to print the total execution time
     "commands": [] // Command array
 # commands：
@@ -81,7 +83,7 @@ module.exports = {
         "[remote:]cd /usr;ls -al", // View the details of the current directory
         "[upload:]./dist,./dist", // Upload the project directory
         "[upload:]./test.txt,./test.txt", // Upload the file
-        "[upload:]./test.txt,./test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // Upload the file and add a timestamp
+        "[upload(isPrintUploadPath):]./test.txt,./test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // Upload the file and add a timestamp
         "[remote-mkdir:]./test-dir", // Create a directory
         "[remote-cp:]./test.txt,./test-dir/test.txt", // Remotely copy the file
         "[remote-mv:]./test.txt,./test{startTime-[YYYY-MM-DD]}.txt", // Rename the file

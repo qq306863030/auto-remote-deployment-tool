@@ -7,6 +7,9 @@ const chalk = require("chalk");
 
 let sftp;
 let execPlugins = new Map();
+const globalSetter = {
+  config: null
+}
 // 初始化配置文件
 function initConfig(filename, description="") {
   // 在执行命令的目录下创建server.config.json文件
@@ -23,12 +26,15 @@ function initConfig(filename, description="") {
   // 获取后缀名
   const extname = path.extname(configPath);
   if (extname === ".json") {
+    defaultConfig.scriptCode = `rdt exec ./${filename}`
     // 写入配置文件
     fs.outputJsonSync(configPath, defaultConfig, { spaces: 2 });
   } else {
     if (extname !== ".js" && extname!== ".json") {
+      filename = filename + '.js'
       configPath = configPath + '.js'
     }
+    defaultConfig.scriptCode = `rdt exec ./${filename}`
     // 写入配置文件
     fs.outputFileSync(configPath, `module.exports = ${JSON.stringify(defaultConfig, null, 2)};`);
   }
@@ -115,6 +121,11 @@ function uploadFile(config, client, filePath, remotePath, includeKeyWords=[], ex
       },
       validate: path => {
         let valid = true;
+        // 判断是文件还是目录
+        const isDirectory = fs.lstatSync(path).isDirectory();
+        if (isDirectory) {
+          return true;
+        }
         if (includeKeyWords && excludeKeyWords && includeKeyWords.length > 0 && excludeKeyWords.length > 0) {
           const isInclude = includeKeyWords.some(str => {
             return path.includes(str)
@@ -248,15 +259,15 @@ function getVersion() {
 }
 
 function logBlue(msg) {
-  console.log(chalk.hex("#6dd2ea")(msg));
+  console.log(chalk.hex("#6dd2ea")(`${getCurrentTime()}${msg}`));
 }
 
 function logGreen(msg) {
-  console.log(chalk.hex("#9bed7f")(msg));
+  console.log(chalk.hex("#9bed7f")(`${getCurrentTime()}${msg}`));
 }
 
 function logRed(msg) {
-  console.log(chalk.hex("#ed7f7f")(msg));
+  console.log(chalk.hex("#ed7f7f")(`${getCurrentTime()}${msg}`));
 }
 
 // 注册插件
@@ -309,6 +320,33 @@ function replacePath(config, type, targetPath) {
   return targetPath;
 }
 
+// 获取当前时间
+function getCurrentTime() {
+  if (globalSetter.config && globalSetter.config.isPrintCurTime) {
+    return dayjs().format("YYYY-MM-DD HH:mm:ss") + ' '
+  }
+  return '';
+}
+
+// 将毫秒数转换成时分秒等单位
+function formatMS(ms) {
+  if (ms < 1000) {
+    return `${ms}毫秒`;
+  } else if (ms < 60000) {
+    return `${(ms / 1000).toFixed(3)}秒`;
+  } else if (ms < 3600000) {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(3);
+    return `${minutes}分${seconds}秒`;
+  } else {
+    const hours = Math.floor(ms / 3600000);
+    const minutes = Math.floor((ms % 3600000) / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(3);
+    return `${hours}小时${minutes}分${seconds}秒`;
+  }
+}
+
+
 module.exports = {
   initConfig,
   readConfig,
@@ -327,5 +365,8 @@ module.exports = {
   getExecPlugins,
   loadPlugins,
   isNotEmpty,
-  replacePath
+  replacePath,
+  getCurrentTime,
+  formatMS,
+  globalSetter
 };

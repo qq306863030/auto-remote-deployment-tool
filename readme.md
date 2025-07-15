@@ -23,6 +23,7 @@ rdt exec [configFilePath] # 执行指定配置文件中的命令(示例: rdt exe
 # 配置文件
 {
     "description": "一个配置文件示例", // 配置文件描述，程序启动时显示
+    "scriptCode": "", // 脚本执行命令（相对路径指向rdt命令执行的目录）
     "host": "127.0.0.1", // 远程服务器IP地址
     "port": 22, // 远程服务器SSH端口
     "username": "root", // 远程服务器用户名
@@ -31,7 +32,8 @@ rdt exec [configFilePath] # 执行指定配置文件中的命令(示例: rdt exe
     "localBaseDir": "./", // 本地执行命令的根目录
     "remoteBaseDir": "/home", // 远端执行命令的根目录
     "isPrintResult": true, // 是否打印执行结果
-    "isPrintCurCommand": false, // 是否打印当前执行的命令
+    "isPrintCurCommand": true, // 是否打印当前执行的命令
+    "isPrintCurTime": true, // 是否在执行中打印当前时间
     "isPrintTotalExecTime": true, // 是否打印总的执行时间
     "commands": [] // 命令数组
 }
@@ -92,7 +94,7 @@ module.exports = {
         "[remote:]cd /usr;ls -al", // 查看当前目录详情
         "[upload:]./dist,./dist", // 上传项目目录
         "[upload:]./test.txt,./test.txt", // 上传文件并增加时间戳
-        "[upload:]./test.txt,./test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // 上传文件并增加时间戳
+        "[upload(isPrintUploadPath):]./test.txt,./test{startTime-[YYYY-MM-DD_HH-mm-ss]}.txt", // 上传文件并增加时间戳, 打印上传路径
         "[remote-mkdir:]./test-dir", // 创建一个目录
         "[remote-cp:]./test.txt,./test-dir/test.txt", // 远程拷贝文件
         "[remote-mv:]./test.txt,./test{startTime-[YYYY-MM-DD]}.txt", // 重命名文件
