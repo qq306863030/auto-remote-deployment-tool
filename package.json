@@ -1,7 +1,7 @@
 {
   "name": "rdtool",
   "description": "A simple Node.js-based remote deployment tool that makes deployments easier with config files.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "license": "MIT",
   "repository": {

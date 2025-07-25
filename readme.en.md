@@ -69,15 +69,17 @@ isPrintUploadPath # Display the file path of the file being uploaded, only used 
 ```js
 module.exports = {
     "description": "A configuration file example",
+    "scriptCode": "rdt exec ./server.config.js", // The script execution command (relative path pointing to the directory where the rdt command is executed， this field is only used as a record identifier)
     "host": "127.0.0.1",
     "port": 22,
     "username": "root",
     "password": "password",
-    "localBaseDir": "./", // Root directory for executing commands locally
-    "remoteBaseDir": "/home", // Root directory for executing commands on the remote server
+    "localBaseDir": "./",
+    "remoteBaseDir": "/home",
     "isPrintResult": true, // Whether to print the execution result
-    "isPrintCurCommand": false, // Whether to print the current executing command
+    "isPrintCurCommand": true, // Whether to print the current executing command
     "isPrintTotalExecTime": true, // Whether to print the total execution time
+    "isPrintCurTime": true, // Whether to print the current time
     "commands": [
         "[local:]npm run build", // Execute local command to package files
         "[remote:]cd /usr;ls -al", // View the details of the current directory
@@ -92,15 +94,18 @@ module.exports = {
         "[print:]Script execution completed"
     ]
 module.exports = {
-    "host": "116.196.68.99",
+    "description": "A configuration file example",
+    "scriptCode": "rdt exec ./server.config.js", // The script execution command (relative path pointing to the directory where the rdt command is executed， this field is only used as a record identifier)
+    "host": "127.0.0.1",
     "port": 22,
     "username": "root",
-    "password": "ZYzx1357%",
+    "password": "password",
     "localBaseDir": "./",
     "remoteBaseDir": "/home",
-	"isPrintResult": true, // Whether to print the execution result
-	"isPrintCurCommand": true, // Whether to print the current executing command
+    "isPrintResult": true, // Whether to print the execution result
+    "isPrintCurCommand": true, // Whether to print the current executing command
     "isPrintTotalExecTime": true, // Whether to print the total execution time
+    "isPrintCurTime": true, // Whether to print the current time
     "commands": [
 		"[local:]echo 'hello world'", // Print 'hello world' and output the return content 'hello world'
 		"[local(isNotPrint):]echo 'hello world'", // Only print 'hello world' without outputting the return content

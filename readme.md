@@ -80,15 +80,17 @@ isPrintUploadPath # 显示正在上传的文件路径, 仅用于文件上传命�
 ```js
 module.exports = {
     "description": "一个配置文件示例",
+    "scriptCode": "rdt exec ./server.config.js", // 脚本执行命令（相对路径指向rdt命令执行的目录, 该字段仅作为记录标识）
     "host": "127.0.0.1",
     "port": 22,
     "username": "root",
     "password": "password",
-    "localBaseDir": "./", // 本地执行命令的根目录
-    "remoteBaseDir": "/home", // 远端执行命令的根目录
+    "localBaseDir": "./",
+    "remoteBaseDir": "/home",
     "isPrintResult": true, // 是否打印执行结果
-    "isPrintCurCommand": false, // 是否打印当前执行的命令
+    "isPrintCurCommand": true, // 是否打印当前执行的命令
     "isPrintTotalExecTime": true, // 是否打印总的执行时间
+    "isPrintCurTime": true, // 是否在执行中打印当前时间
     "commands": [
         "[local:]npm run build", // 本地执行命令, 打包文件
         "[remote:]cd /usr;ls -al", // 查看当前目录详情
@@ -107,15 +109,18 @@ module.exports = {
 
 
 module.exports = {
-    "host": "116.196.68.99",
+    "description": "一个配置文件示例",
+    "scriptCode": "rdt exec ./server.config.js", // 脚本执行命令（相对路径指向rdt命令执行的目录）
+    "host": "127.0.0.1",
     "port": 22,
     "username": "root",
-    "password": "ZYzx1357%",
+    "password": "password",
     "localBaseDir": "./",
     "remoteBaseDir": "/home",
     "isPrintResult": true, // 是否打印执行结果
     "isPrintCurCommand": true, // 是否打印当前执行的命令
     "isPrintTotalExecTime": true, // 是否打印总的执行时间
+    "isPrintCurTime": true, // 是否在执行中打印当前时间
     "commands": [
 		"[local:]echo 'hello world'", // 打印hello world，并输出返回内容hello world
 		"[local(isNotPrint):]echo 'hello world'", // 仅打印hello world，不输出返回内容

@@ -1,6 +1,6 @@
 module.exports = {
   description: "",
-  scriptCode: "", // 脚本执行命令（相对路径指向rdt命令执行的目录）
+  scriptCode: "", // 脚本执行命令（相对路径指向rdt命令执行的目录, 该字段仅作为记录标识）
   host: "127.0.0.1",
   port: 22,
   username: "root",
@@ -17,5 +17,5 @@ module.exports = {
     "[upload(isPrintUploadPath):]./dist,./test/dist",
     "[print:]脚本执行完成",
   ],
-  footer: "you need to install rdtool first: npm install rdtool -g",
+  warn: "you need to install rdtool first: npm install rdtool -g",
 };
