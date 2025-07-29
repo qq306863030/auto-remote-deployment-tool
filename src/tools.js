@@ -210,7 +210,7 @@ function preCommand(config, command) {
     for (let i = 0; i < matchArr2.length; i++) {
       const match = matchArr2[i];
       const format = match.replace("{startTime-[", "").replace("]}", "");
-      command = command.replace(match, config.startTime.format(format));
+      command = command.replace(match, dayjs(config.startTime).format(format));
     }
   }
   return command;
