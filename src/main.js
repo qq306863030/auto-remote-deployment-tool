@@ -113,8 +113,18 @@ async function _exec(client, config, commandList = []) {
           }
         }
       }
-    } else if (Array.isArray(command) && lastRes === true) {
-      await _exec(client, config, command)
+    } else if (Array.isArray(command) && typeof lastRes === 'boolean') {
+      if (Array.isArray(command[0])) {
+        if (lastRes) {
+          await _exec(client, config, command[0])
+        } else {
+          command[1] && await _exec(client, config, command[1])
+        }
+      } else {
+        if (lastRes) {
+          await _exec(client, config, command)
+        }
+      }
     }
   }
 }

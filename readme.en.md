@@ -37,6 +37,7 @@ rdt exec [configFilePath] # Execute the commands in the specified configuration 
 [local:] # Execute local commands
 [local-cd:] # Switch the local base directory path (dynamically switch the localBaseDir in the configuration file, example: [local-cd:]targetPath)
 [local-pwd:] # Get the current local base directory path (example: [local-pwd:])
+[local-zip:] # Compress the local file([local-zip:]originPath,targetPath example: [local-zip:]./dist,./dist.zip)
 [remote:] # Execute remote commands
 [remote-cp:] # Execute remote copy command (example: [remote-cp:]originPath,targetPath)
 [remote-mv:] # Execute remote move command (example: [remote-mv:]originPath,targetPath)
@@ -118,6 +119,15 @@ module.exports = {
 		[
 			"[remote:]cd /my-remote-test;mkdir /my-remote-test/test1", // Create the directory test1 in the my-remote-test directory
 			"[remote-mv:]/my-remote-test/test1,/my-remote-test/test{time-[YYYY-MM-DD]}" // Rename test1
+		],
+        "[remote-hasPath:]./my-remote-test2", // 判断my-remote-test2目录是否存在
+		[
+			[
+                "[remote:]cd {remoteBaseDir}/my-remote-test2;mkdir ./test2", // If the return value is true, execute the first element in the array, create a directory test2 in the my-remote-test2 directory
+            ],
+            [
+                "[remote-mkdir:]./my-remote-test2", // If the return value is false, execute the second element in the array, create the directory my-remote-test2
+            ]
 		],
 		"[remote-hasPort:]8003", // Check if the port is occupied. If it returns false, the following array content will not be executed
 		[

@@ -44,6 +44,7 @@ rdt exec [configFilePath] # 执行指定配置文件中的命令(示例: rdt exe
 [local:] # 执行本地命令
 [local-cd:] # 切换本地基础目录路径(动态切换配置文件中的localBaseDir, 示例: [local-cd:]targetPath)
 [local-pwd:] # 获取当前本地基础目录路径(示例: [local-pwd:])
+[local-zip:] # 本地压缩文件([local-zip:]originPath,targetPath 示例: [local-zip:]./dist,./dist.zip)
 [remote:] # 执行远端命令
 [remote-cp:] # 执行远程拷贝命令(示例: [remote-cp:]originPath,targetPath)
 [remote-mv:] # 执行远程剪切命令(示例: [remote-mv:]originPath,targetPath)
@@ -133,6 +134,15 @@ module.exports = {
 		[
 			"[remote:]cd /my-remote-test;mkdir /my-remote-test/test1", // 在目录my-remote-test中创建目录test1
 			"[remote-mv:]/my-remote-test/test1,/my-remote-test/test{time-[YYYY-MM-DD]}" // 重命名test1
+		],
+        "[remote-hasPath:]./my-remote-test2", // 判断my-remote-test2目录是否存在
+		[
+			[
+                "[remote:]cd {remoteBaseDir}/my-remote-test2;mkdir ./test2", // 返回true，执行数组中第一个元素，在目录my-remote-test2中创建目录test2
+            ],
+            [
+                "[remote-mkdir:]./my-remote-test2", // 返回false，执行数组中第二个元素，创建目录my-remote-test2
+            ]
 		],
 		"[remote-hasPort:]8003", // 判断端口是否被占用, 如果返回false,则不执行以下数组的内容
 		[
