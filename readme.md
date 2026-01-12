@@ -16,6 +16,7 @@ npm install -g rdtool
 ```bash
 rdt init [configFileName] # 在当前目录生成server.config.js/json配置文件, 如果host未配置, 则不连接远程服务器
 rdt exec [configFilePath] # 执行指定配置文件中的命令(示例: rdt exec ./remote.config.json)或指定一个目录，自动在指定目录中查找server.config.json文件(示例: rdt exec ./src/),默认查找当前目录下的server.config.json文件
+rdt vgen # 通过Web页面可视化生成一个配置文件模板
 ```
 
 ## 介绍
@@ -24,7 +25,7 @@ rdt exec [configFilePath] # 执行指定配置文件中的命令(示例: rdt exe
 {
     "description": "一个配置文件示例", // 配置文件描述，程序启动时显示
     "scriptCode": "", // 脚本执行命令（相对路径指向rdt命令执行的目录）
-    "host": "127.0.0.1", // 远程服务器IP地址
+    "host": "127.0.0.1", // 远程服务器IP地址（设置为空时不连接远程服务器）
     "port": 22, // 远程服务器SSH端口
     "username": "root", // 远程服务器用户名
     "password": "password", // 远程服务器密码
@@ -102,7 +103,7 @@ module.exports = {
         "[remote-cp:]./test.txt,./test-dir/test.txt", // 远程拷贝文件
         "[remote-mv:]./test.txt,./test{startTime-[YYYY-MM-DD]}.txt", // 重命名文件
         "[remote-rm:]./test.txt", // 删除文件
-        "[remote-rm:]{remoteBaseDir}/dist", // 删除目录
+        "[remote-rm:]./dist", // 删除目录
         "[print:]脚本执行完成"
     ]
 }
@@ -138,7 +139,7 @@ module.exports = {
         "[remote-hasPath:]./my-remote-test2", // 判断my-remote-test2目录是否存在
 		[
 			[
-                "[remote:]cd {remoteBaseDir}/my-remote-test2;mkdir ./test2", // 返回true，执行数组中第一个元素，在目录my-remote-test2中创建目录test2
+                "[remote:]cd ./my-remote-test2;mkdir ./test2", // 返回true，执行数组中第一个元素，在目录my-remote-test2中创建目录test2
             ],
             [
                 "[remote-mkdir:]./my-remote-test2", // 返回false，执行数组中第二个元素，创建目录my-remote-test2

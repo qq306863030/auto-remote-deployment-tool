@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDTool 配置生成器</title>
+    <script src="./vue3.js"></script>
+    <link rel="stylesheet" href="./fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <header>
+                <h1><i class="fas fa-terminal"></i> RDTool 配置生成器</h1>
+            </header>
+            
+            <div class="main-content">
+                <!-- 左侧：基本配置 -->
+                <div class="config-section">
+                    <h2 class="section-title"><i class="fas fa-cog"></i> 基本配置</h2>
+                    
+                    <div class="form-group">
+                        <label for="filename">配置文件名称</label>
+                        <div class="filename-input">
+                            <input type="text" id="filename" v-model="configData.filename" placeholder="例如: server">
+                            <span>.config.js</span>
+                        </div>
+                        <small style="color: #7f8c8d; margin-top: 5px; display: block;">
+                            生成的文件名称为: {{ configData.filename ? configData.filename + '.config.js' : 'server.config.js' }}
+                        </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">配置文件描述</label>
+                        <input type="text" id="description" v-model="configData.description" placeholder="例如: 生产环境部署配置">
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div>
+                                <label for="host">远程服务器地址 (host)</label>
+                                <input type="text" id="host" v-model="configData.host" placeholder="例如: 192.168.1.100 或 example.com">
+                            </div>
+                            <div>
+                                <label for="port">SSH 端口 (port)</label>
+                                <input type="number" id="port" v-model.number="configData.port">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div>
+                                <label for="username">用户名 (username)</label>
+                                <input type="text" id="username" v-model="configData.username">
+                            </div>
+                            <div class="password-toggle">
+                                <label for="password">密码 (password)</label>
+                                <input :type="showPassword ? 'text' : 'password'" id="password" v-model="configData.password" placeholder="远程服务器密码">
+                                <button type="button" @click="togglePasswordVisibility">
+                                    <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="privateKeyPath">私钥路径 (可选)</label>
+                        <input type="text" id="privateKeyPath" v-model="configData.privateKeyPath" placeholder="例如: C:/Users/username/.ssh/id_rsa">
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div>
+                                <label for="localBaseDir">本地基础目录</label>
+                                <input type="text" id="localBaseDir" v-model="configData.localBaseDir">
+                            </div>
+                            <div>
+                                <label for="remoteBaseDir">远程基础目录</label>
+                                <input type="text" id="remoteBaseDir" v-model="configData.remoteBaseDir">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>输出选项</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="isPrintResult" v-model="configData.isPrintResult">
+                                <label for="isPrintResult">打印执行结果</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="isPrintCurCommand" v-model="configData.isPrintCurCommand">
+                                <label for="isPrintCurCommand">打印当前命令</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="isPrintCurTime" v-model="configData.isPrintCurTime">
+                                <label for="isPrintCurTime">打印当前时间</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="isPrintTotalExecTime" v-model="configData.isPrintTotalExecTime">
+                                <label for="isPrintTotalExecTime">打印总执行时间</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 中间：命令配置 -->
+                <div class="config-section">
+                    <h2 class="section-title"><i class="fas fa-code"></i> 命令配置</h2>
+                    
+                    <div class="command-controls">
+                        <button class="btn btn-primary" @click.stop.prev="addCommand">
+                            <i class="fas fa-plus"></i> 添加命令
+                        </button>
+                    </div>
+                    
+                    <div class="commands-container">
+                        <div v-if="configData.commands.length === 0" class="empty-state">
+                            <i class="fas fa-code-branch"></i>
+                            <p>暂无命令，点击上方按钮添加您的第一个命令</p>
+                        </div>
+                        
+                        <div v-else v-for="(command, index) in configData.commands" :key="command.id" class="command-item">
+                            <div class="command-item-header">
+                                <div class="command-index-container">
+                                    <div class="command-index">{{ index + 1 }}</div>
+                                </div>
+                                <div class="command-actions">
+                                    <button @click="moveCommandUp(index)" :disabled="index === 0" title="上移">
+                                        <i class="fas fa-arrow-up"></i>
+                                    </button>
+                                    <button @click="moveCommandDown(index)" :disabled="index === configData.commands.length - 1" title="下移">
+                                        <i class="fas fa-arrow-down"></i>
+                                    </button>
+                                    <button @click="duplicateCommand(index)" title="复制">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                    <button @click="removeCommand(index)" title="删除">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>命令类型</label>
+                                <div class="command-prefix-group">
+                                    <select v-model="command.type" @change="updateCommandDefaults(command)">
+                                        <option v-for="cmdType in commandTypes" :value="cmdType.id">
+                                            {{ cmdType.name }} - {{ cmdType.prefix }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div v-if="!getCmdType(command.type).noInput">
+                                <div :class="{'full-width-input': getCmdType(command.type).fullWidth}" v-if="getCmdType(command.type).inputType === 'single'">
+                                    <div class="form-group">
+                                        <label>{{ getInputLabel(command.type) }}</label>
+                                        <input type="text" v-model="command.text" :placeholder="getInputPlaceholder(command.type)">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" v-else-if="getCmdType(command.type).inputType === 'double'">
+                                    <label>{{ getInputLabel(command.type) }}</label>
+                                    <div class="multi-input-group">
+                                        <input type="text" v-model="command.input1" :placeholder="getInputPlaceholder(command.type, 1)">
+                                        <input type="text" v-model="command.input2" :placeholder="getInputPlaceholder(command.type, 2)">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" v-else-if="getCmdType(command.type).inputType === 'upload'">
+                                    <label>上传文件参数</label>
+                                    <div class="multi-input-group">
+                                        <input type="text" v-model="command.input1" placeholder="本地路径，例如: ./dist">
+                                        <input type="text" v-model="command.input2" placeholder="远程路径，例如: ./dist">
+                                    </div>
+                                    
+                                    <div class="upload-advanced">
+                                        <div class="upload-advanced-title">
+                                            <i class="fas fa-cog"></i> 高级选项 (可选)
+                                        </div>
+                                        <div class="multi-input-group">
+                                            <input type="text" v-model="command.input3" placeholder="包含关键词，例如: [.js,.css]">
+                                            <input type="text" v-model="command.input4" placeholder="排除关键词，例如: [.tmp,.bak]">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div :class="{'full-width-input': getCmdType(command.type).fullWidth}" v-else-if="getCmdType(command.type).inputType === 'record-exec-time'">
+                                    <div class="form-group">
+                                        <label>记录执行时间标识符</label>
+                                        <input type="text" v-model="command.text" placeholder="自定义标识符，例如: record1">
+                                    </div>
+                                </div>
+                                
+                                <div :class="{'full-width-input': getCmdType(command.type).fullWidth}" v-else-if="getCmdType(command.type).inputType === 'print-exec-time'">
+                                    <div class="form-group">
+                                        <label>打印执行时间标识符</label>
+                                        <input type="text" v-model="command.text" placeholder="自定义标识符，需与[record-exec-time:]成对使用">
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <div class="command-no-input">
+                                    此命令不需要输入内容
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" v-if="getCmdType(command.type).hasOptions">
+                                <label>命令选项 (可多选)</label>
+                                <div class="command-options">
+                                    <div v-for="option in getAvailableOptions(command.type)" class="command-option">
+                                        <input type="checkbox" :id="'option-' + command.id + '-' + option.id" 
+                                               :value="option.id" v-model="command.options">
+                                        <label :for="'option-' + command.id + '-' + option.id">{{ option.name }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="command.isBoolean">
+                                <div class="return-boolean">
+                                    <div class="return-title"> 
+                                        <i :class="expandedChildCommands[command.id + '_true'] ? 'fas fa-chevron-down' : 'fas fa-chevron-right'" style="cursor: pointer;"  @click="toggleChildCommands(command.id, true)"></i>
+                                        True分支 (当命令返回true时执行)</div>
+                                    <div class="command-add-childbtn">
+                                    <button class="btn btn-primary" @click.stop="addChildCommand(command, 0)">
+                                        <i class="fas fa-plus"></i> 添加子命令
+                                    </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- True分支子命令 -->
+                                <div v-if="expandedChildCommands[command.id + '_true'] && command.childCommands && command.childCommands[0].length > 0" 
+                                    class="child-commands-container">
+                                    <div v-for="(childCmd, childIndex) in command.childCommands[0]" :key="childCmd.id" 
+                                        class="child-command-item">
+                                    <div class="child-command-header">
+                                        <div class="child-command-index">
+                                        True-{{ childIndex + 1 }}
+                                        </div>
+                                        <div class="child-command-actions">
+                                        <button @click="moveChildCommandUp(command, 0, childIndex)" 
+                                                :disabled="childIndex === 0" title="上移">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </button>
+                                        <button @click="moveChildCommandDown(command, 0, childIndex)" 
+                                                :disabled="childIndex === command.childCommands[0].length - 1" title="下移">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                        <button @click="removeChildCommand(command, 0, childIndex)" title="删除">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 子命令配置（简化的版本） -->
+                                    <div class="form-group">
+                                        <label>命令类型</label>
+                                        <select v-model="childCmd.type" @change="updateCommandDefaults(childCmd)">
+                                        <option v-for="cmdType in commandTypes" :value="cmdType.id">
+                                            {{ cmdType.name }} - {{ cmdType.prefix }}
+                                        </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div v-if="!getCmdType(childCmd.type).noInput">
+                                        <div class="form-group">
+                                        <label>{{ getInputLabel(childCmd.type) }}</label>
+                                        <input type="text" v-model="childCmd.text" 
+                                                :placeholder="getInputPlaceholder(childCmd.type)">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="return-boolean">
+                                    <div class="return-title">
+                                        <i :class="expandedChildCommands[command.id + '_false'] ? 'fas fa-chevron-down' : 'fas fa-chevron-right'" style="cursor: pointer;"  @click="toggleChildCommands(command.id, false)"></i>
+                                        False分支 (当命令返回false时执行)</div>
+                                    <div class="command-add-childbtn">
+                                    <button class="btn btn-primary" @click.stop="addChildCommand(command, 1)">
+                                        <i class="fas fa-plus"></i> 添加子命令
+                                    </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- False分支子命令 -->
+                                <div v-if="expandedChildCommands[command.id + '_false'] && command.childCommands && command.childCommands[1].length > 0" 
+                                    class="child-commands-container">
+                                    <div v-for="(childCmd, childIndex) in command.childCommands[1]" :key="childCmd.id" 
+                                        class="child-command-item">
+                                    <div class="child-command-header">
+                                        <div class="child-command-index">
+                                        False-{{ childIndex + 1 }}
+                                        </div>
+                                        <div class="child-command-actions">
+                                        <button @click="moveChildCommandUp(command, 1, childIndex)" 
+                                                :disabled="childIndex === 0" title="上移">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </button>
+                                        <button @click="moveChildCommandDown(command, 1, childIndex)" 
+                                                :disabled="childIndex === command.childCommands[1].length - 1" title="下移">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </button>
+                                        <button @click="removeChildCommand(command, 1, childIndex)" title="删除">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 子命令配置（简化的版本） -->
+                                    <div class="form-group">
+                                        <label>命令类型</label>
+                                        <select v-model="childCmd.type" @change="updateCommandDefaults(childCmd)">
+                                        <option v-for="cmdType in commandTypes" :value="cmdType.id">
+                                            {{ cmdType.name }} - {{ cmdType.prefix }}
+                                        </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div v-if="!getCmdType(childCmd.type).noInput">
+                                        <div class="form-group">
+                                        <label>{{ getInputLabel(childCmd.type) }}</label>
+                                        <input type="text" v-model="childCmd.text" 
+                                                :placeholder="getInputPlaceholder(childCmd.type)">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧：生成的配置文件 -->
+                <div class="config-section output-section">
+                    <div class="output-header">
+                        <h2 class="section-title"><i class="fas fa-file-code"></i> 生成的配置文件</h2>
+                        <div class="output-actions">
+                            <button class="btn btn-success" @click="copyConfig">
+                                <i class="far fa-copy"></i> 复制
+                            </button>
+                            <button class="btn btn-primary" @click="downloadConfig">
+                                <i class="fas fa-download"></i> 下载
+                            </button>
+                            <button class="btn btn-info" @click="importConfig">
+                                <i class="fas fa-upload"></i> 导入
+                              </button>
+                            <button class="btn btn-danger" @click="resetConfig">
+                                <i class="fas fa-redo"></i> 重置
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <pre>{{ formattedConfig }}</pre>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>© 2026 | RDTool可视化配置工具 v1.0 | By DeepSeek AI & Roman.</p>
+            </div>
+        </div>
+        
+        <!-- 通知消息 -->
+        <div class="notification" :class="{ show: notification.show, 'notification-success': notification.type === 'success', 'notification-error': notification.type === 'error' }">
+            <div class="notification-content">{{ notification.message }}</div>
+        </div>
+        <input type="file" id="configFileInput" accept=".js,.json" style="display: none" @change="handleFileSelect">
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>

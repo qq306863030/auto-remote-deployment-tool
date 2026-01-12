@@ -160,7 +160,10 @@ function uploadFile(config, client, filePath, remotePath, includeKeyWords=[], ex
 // 执行本地命令
 async function execLocalCommand(command) {
   if (typeof command === "string") {
-    return shelljs.exec(command);
+    return shelljs.exec(command, {
+      encoding: "utf8",
+      silent: true,
+    });
   } else if (Array.isArray(command)) {
     let result = [];
     for (let i = 0; i < command.length; i++) {

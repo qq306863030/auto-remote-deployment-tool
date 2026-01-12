@@ -1,7 +1,9 @@
 const { execServerCommand } = require("../tools");
 
 function exec(client, config, command) {
-    console.log('&&&&', command)
+    if (typeof command === "string") {
+        command = `cd ${config.remoteBaseDir};${command}`
+    }
     return execServerCommand(client, command);
 }
 

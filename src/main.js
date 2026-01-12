@@ -15,6 +15,7 @@ const {
   isNotEmpty,
   formatMS,
   globalSetter,
+  execLocalCommand,
 } = require("./tools");
 
 function init(filename) {
@@ -129,7 +130,14 @@ async function _exec(client, config, commandList = []) {
   }
 }
 
+function vgen() {
+  // 使用默认浏览器打开html
+  const htmlPath = path.resolve(__dirname, "../generater/index.html");
+  execLocalCommand(`start ${htmlPath}`)
+}
+
 module.exports = {
   init,
   exec,
+  vgen
 };

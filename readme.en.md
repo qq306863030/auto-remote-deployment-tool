@@ -14,13 +14,14 @@ npm install -g rdtool
 ```bash
 rdt init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
 rdt exec [configFilePath] # Execute the commands in the specified configuration file (example: rdt exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: rdt exec ./src/). By default, it looks for the server.config.json file in the current directory.
+rdt vgen # Generate a configuration file template through Web page visualization.
 ```
 ## Introduction
 ```bash
 # Configuration file
     "description": "A configuration file example", // Description of the configuration file, displayed when the program starts
     "scriptCode": "", // The script execution command (relative path pointing to the directory where the rdt command is executed)
-    "host": "127.0.0.1", // IP address of the remote server
+    "host": "127.0.0.1", // IP address of the remote server (If the host is not configured, it will not connect to the remote server)
     "port": 22, // SSH port of the remote server
     "username": "root", // Username for the remote server
     "password": "password", // Password for the remote server
@@ -91,7 +92,7 @@ module.exports = {
         "[remote-cp:]./test.txt,./test-dir/test.txt", // Remotely copy the file
         "[remote-mv:]./test.txt,./test{startTime-[YYYY-MM-DD]}.txt", // Rename the file
         "[remote-rm:]./test.txt", // Delete the file
-        "[remote-rm:]{remoteBaseDir}/dist", // Delete the directory
+        "[remote-rm:]./dist", // Delete the directory
         "[print:]Script execution completed"
     ]
 module.exports = {
@@ -123,7 +124,7 @@ module.exports = {
         "[remote-hasPath:]./my-remote-test2", // 判断my-remote-test2目录是否存在
 		[
 			[
-                "[remote:]cd {remoteBaseDir}/my-remote-test2;mkdir ./test2", // If the return value is true, execute the first element in the array, create a directory test2 in the my-remote-test2 directory
+                "[remote:]cd ./my-remote-test2;mkdir ./test2", // If the return value is true, execute the first element in the array, create a directory test2 in the my-remote-test2 directory
             ],
             [
                 "[remote-mkdir:]./my-remote-test2", // If the return value is false, execute the second element in the array, create the directory my-remote-test2

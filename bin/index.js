@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const program = require("commander");
-const { init, exec } = require("../src/main");
+const { init, exec, vgen } = require("../src/main");
 const { getVersion } = require("../src/tools");
 
 program
@@ -23,6 +23,14 @@ program
   .description("执行脚本")
   .action((filePath) => {
     exec(filePath)
+  });
+
+program
+  .command("vgen")
+  .alias("g")
+  .description("通过web界面可视化生成配置文件")
+  .action(() => {
+    vgen()
   });
 
 program.parse(process.argv);
