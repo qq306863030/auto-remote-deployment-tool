@@ -142,3 +142,6 @@ module.exports = {
 		"[print:]Script execution completed"
     ]
 ```
+
+## Warning
+1. Error [ERR_REQUIRE_ESM]: require() of ES Module ... solution: Change the file extension of the configuration file to .cjs

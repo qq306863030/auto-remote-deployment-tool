@@ -158,3 +158,6 @@ module.exports = {
     ]
 }
 ```
+
+## 注意
+1.报错Error [ERR_REQUIRE_ESM]: require() of ES Module ... 解决方案：将配置文件后缀名修改为.cjs

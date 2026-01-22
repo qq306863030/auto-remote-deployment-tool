@@ -60,7 +60,7 @@ function readConfig(configPath) {
   let config;
   // 判断后缀名是.js还是.json
   const extname = path.extname(configPath);
-  if (extname === ".js") {
+  if (extname === ".js" || extname === ".cjs") {
     config = require(configPath);
   } else if (extname === ".json") {
     try {
