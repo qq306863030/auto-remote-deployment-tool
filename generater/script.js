@@ -226,8 +226,9 @@ createApp({
 
     // 配置数据
     const configData = ref({
-      filename: 'server',
+      filename: 'release',
       description: 'RDTool配置文件',
+      warn: 'you need to install rdtool first: npm install rdtool -g',
       host: '127.0.0.1',
       port: 22,
       username: 'root',
@@ -657,7 +658,7 @@ createApp({
     const generateConfig = () => {
       const config = {
         description: configData.value.description,
-        scriptCode: `rdt exec ./${configData.value.filename}.config.js`,
+        scriptCode: `rdt exec ./${configData.value.filename}.config.cjs`,
         host: configData.value.host,
         port: configData.value.port,
         username: configData.value.username,
@@ -669,6 +670,11 @@ createApp({
         isPrintCurTime: configData.value.isPrintCurTime,
         isPrintTotalExecTime: configData.value.isPrintTotalExecTime,
         commands: [],
+      }
+
+      // 如果有警告文本，添加
+      if (configData.value.warn.trim()) {
+        config.warn = configData.value.warn
       }
 
       // 如果有私钥路径，添加
@@ -711,7 +717,7 @@ createApp({
     const downloadConfig = () => {
       const config = generateConfig()
       const configText = `module.exports = ${JSON.stringify(config, null, 2)};`
-      const fileName = `${configData.value.filename}.config.js`
+      const fileName = `${configData.value.filename}.config.cjs`
 
       const blob = new Blob([configText], { type: 'application/javascript' })
       const url = URL.createObjectURL(blob)
@@ -729,8 +735,9 @@ createApp({
     // 重置配置
     const resetConfig = () => {
       if (confirm('确定要重置所有配置吗？这将清除所有命令和设置。')) {
-        configData.value.filename = 'server'
+        configData.value.filename = 'release'
         configData.value.description = 'RDTool配置文件'
+        configData.value.warn = ''
         configData.value.host = '127.0.0.1'
         configData.value.port = 22
         configData.value.username = 'root'

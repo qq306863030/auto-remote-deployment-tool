@@ -12,14 +12,14 @@ const globalSetter = {
 }
 // 初始化配置文件
 function initConfig(filename, description="") {
-  // 在执行命令的目录下创建server.config.json文件
-  let configPath = path.resolve("./", filename || "server.config.js");
+  // 在执行命令的目录下创建release.config.json文件
+  let configPath = path.resolve("./", filename || "release.config.cjs");
   // 判断文件是否存在
   if (fs.pathExistsSync(configPath)) {
     logRed("文件已存在");
     return;
   }
-  const defaultConfigPath = path.resolve(__dirname, "./default/server.config.js");
+  const defaultConfigPath = path.resolve(__dirname, "./default/release.config.cjs");
   // 读取默认配置文件
   const defaultConfig = require(defaultConfigPath);
   defaultConfig.description = description;
@@ -30,9 +30,9 @@ function initConfig(filename, description="") {
     // 写入配置文件
     fs.outputJsonSync(configPath, defaultConfig, { spaces: 2 });
   } else {
-    if (extname !== ".js" && extname!== ".json") {
-      filename = filename + '.js'
-      configPath = configPath + '.js'
+    if (extname !== ".js" && extname!== ".json" && extname !== ".cjs") {
+      filename = filename + '.cjs'
+      configPath = configPath + '.cjs'
     }
     defaultConfig.scriptCode = `rdt exec ./${filename}`
     // 写入配置文件
@@ -43,13 +43,13 @@ function initConfig(filename, description="") {
 // 读取执行命令目录下的配置文件
 function readConfig(configPath) {
   if (!configPath) {
-    configPath = path.resolve("./", "server.config.js");
+    configPath = path.resolve("./", "release.config.cjs");
   } else {
     configPath = path.resolve("./", configPath);
     // 判断是否是目录
     const isDir = fs.lstatSync(configPath).isDirectory();
     if (isDir) {
-      configPath = path.resolve(configPath, "server.config.js");
+      configPath = path.resolve(configPath, "release.config.cjs");
     }
   }
   const isCheck = fs.pathExistsSync(configPath);

@@ -12,8 +12,8 @@ npm install -g rdtool
 ```
 ## Usage
 ```bash
-rdt init [configFileName] # Generate a server.config.js/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
-rdt exec [configFilePath] # Execute the commands in the specified configuration file (example: rdt exec ./remote.config.json) or specify a directory to automatically find the server.config.json file in the specified directory (example: rdt exec ./src/). By default, it looks for the server.config.json file in the current directory.
+rdt init [configFileName] # Generate a release.config.cjs/json configuration file in the current directory. If the host is not configured, it will not connect to the remote server.
+rdt exec [configFilePath] # Execute the commands in the specified configuration file (example: rdt exec ./remote.config.json) or specify a directory to automatically find the release.config.json file in the specified directory (example: rdt exec ./src/). By default, it looks for the release.config.json file in the current directory.
 rdt vgen # Generate a configuration file template through Web page visualization.
 ```
 ## Introduction
@@ -71,7 +71,7 @@ isPrintUploadPath # Display the file path of the file being uploaded, only used 
 ```js
 module.exports = {
     "description": "A configuration file example",
-    "scriptCode": "rdt exec ./server.config.js", // The script execution command (relative path pointing to the directory where the rdt command is executed， this field is only used as a record identifier)
+    "scriptCode": "rdt exec ./release.config.cjs", // The script execution command (relative path pointing to the directory where the rdt command is executed， this field is only used as a record identifier)
     "host": "127.0.0.1",
     "port": 22,
     "username": "root",
@@ -97,7 +97,7 @@ module.exports = {
     ]
 module.exports = {
     "description": "A configuration file example",
-    "scriptCode": "rdt exec ./server.config.js", // The script execution command (relative path pointing to the directory where the rdt command is executed， this field is only used as a record identifier)
+    "scriptCode": "rdt exec ./release.config.cjs", // The script execution command (relative path pointing to the directory where the rdt command is executed， this field is only used as a record identifier)
     "host": "127.0.0.1",
     "port": 22,
     "username": "root",

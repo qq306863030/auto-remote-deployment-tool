@@ -25,7 +25,7 @@ function init(filename) {
       type: "input",
       name: "filename",
       message: "请输入配置文件的名称",
-      default: "server.config.js"
+      default: "release.config.cjs"
     },
     {
       type: "input",

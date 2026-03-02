@@ -24,17 +24,25 @@
                     <div class="form-group">
                         <label for="filename">配置文件名称</label>
                         <div class="filename-input">
-                            <input type="text" id="filename" v-model="configData.filename" placeholder="例如: server">
-                            <span>.config.js</span>
+                            <input type="text" id="filename" v-model="configData.filename" placeholder="例如: release">
+                            <span>.config.cjs</span>
                         </div>
                         <small style="color: #7f8c8d; margin-top: 5px; display: block;">
-                            生成的文件名称为: {{ configData.filename ? configData.filename + '.config.js' : 'server.config.js' }}
+                            生成的文件名称为: {{ configData.filename ? configData.filename + '.config.cjs' : 'release.config.cjs' }}
                         </small>
                     </div>
                     
                     <div class="form-group">
                         <label for="description">配置文件描述</label>
                         <input type="text" id="description" v-model="configData.description" placeholder="例如: 生产环境部署配置">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="warn">警告提示文本</label>
+                        <input type="text" id="warn" v-model="configData.warn" placeholder="例如: you need to install rdtool first: npm install rdtool -g！">
+                        <small style="color: #7f8c8d; margin-top: 5px; display: block;">
+                            仅用于提醒打开当前文件的用户
+                        </small>
                     </div>
                     
                     <div class="form-group">
